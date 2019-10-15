@@ -14,36 +14,36 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func GenerateToken(usernane, password string) (string, error) {
+func GenerateToken(username, password string) (string, error) {
 	nowTime := time.Now()
-	//过期时间
-	expireTime := nowTime.Add(2 * time.Hour)
+	expireTime := nowTime.Add(3 * time.Hour)
+
 	claims := Claims{
-		usernane,
+		username,
 		password,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "gin-blog",
 		},
 	}
-	//声明令牌
+
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	//转成签名字符串
-	token, err := tokenClaims.SigningString()
+	token, err := tokenClaims.SignedString(jwtSecret)
 
 	return token, err
 }
 
-//解析令牌
 func ParseToken(token string) (*Claims, error) {
-	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (i interface{}, e error) {
+	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil
 	})
+
 	if tokenClaims != nil {
 		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
 			return claims, nil
 		}
 	}
+
 	return nil, err
 }
 

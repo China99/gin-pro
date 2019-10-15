@@ -19,10 +19,11 @@ var (
 	PageSize  int
 	JwtSecret string
 )
+var LINUX_PATH = "conf/app.ini"
 
 func init() {
 	var err error
-	Cfg, err = ini.Load("src/gin-pro/conf/app.ini")
+	Cfg, err = ini.Load(LINUX_PATH)
 	if err != nil {
 		log.Fatalf("Fail to parse 'conf/app.ini': %v", err)
 	}

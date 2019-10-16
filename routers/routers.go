@@ -5,6 +5,7 @@ import (
 	"gin-pro/pkg/setting"
 	"gin-pro/routers/api"
 	"gin-pro/routers/api/v1"
+
 	"github.com/gin-gonic/gin"
 )
 

@@ -9,13 +9,13 @@ require (
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-ini/ini v1.48.0
 	github.com/jinzhu/gorm v1.9.11
+	github.com/robfig/cron v1.2.0
 	github.com/rs/zerolog v1.15.0
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.3
 	github.com/unknwon/com v1.0.1
-	golang.org/x/image v0.0.0-20180628062038-cc896f830ced // indirect
 	golang.org/x/sys v0.0.0-20190921204832-2dccfee4fd3e // indirect
 	google.golang.org/appengine v1.6.3 // indirect
-	gopkg.in/ini.v1 v1.48.0 // indirect
+	gopkg.in/ini.v1 v1.48.0
 
 )

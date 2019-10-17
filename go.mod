@@ -7,7 +7,7 @@ require (
 	github.com/astaxie/beego v1.12.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.4.0
-	github.com/go-ini/ini v1.48.0
+	github.com/gomodule/redigo v2.0.0+incompatible
 	github.com/jinzhu/gorm v1.9.11
 	github.com/robfig/cron v1.2.0
 	github.com/rs/zerolog v1.15.0

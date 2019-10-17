@@ -4,10 +4,12 @@ import (
 	_ "gin-pro/docs"
 	"gin-pro/middleware/jwt"
 	"gin-pro/pkg/setting"
+	"gin-pro/pkg/upload"
 	"gin-pro/routers/api"
 	"gin-pro/routers/api/v1"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,10 +20,12 @@ func InitRouter() *gin.Engine {
 
 	r.Use(gin.Recovery())
 
-	gin.SetMode(setting.RunMode)
-
+	gin.SetMode(setting.ServerSetting.RunMode)
+	r.StaticFS("/upload/images", http.Dir(upload.GetImageFullPath()))
 	r.GET("/auth", api.GetAuth)
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.POST("/upload", api.UploadImage)
+
 	apiv1 := r.Group("/api/v1")
 	apiv1.Use(jwt.JWT())
 	{

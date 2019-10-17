@@ -2,9 +2,11 @@ package v1
 
 import (
 	"gin-pro/models"
+	"gin-pro/pkg/app"
 	"gin-pro/pkg/e"
 	"gin-pro/pkg/setting"
 	"gin-pro/pkg/util"
+	"gin-pro/service/cache_service"
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
@@ -14,29 +16,41 @@ import (
 
 //获取单个文章
 func GetArticle(c *gin.Context) {
-	//代码冗余，逻辑不清晰
+	/*	//代码冗余，逻辑不清晰
+		id := com.StrTo(c.Param("id")).MustInt()
+		valid.Min(id, 1, "id").Message("ID必须大于0")
+
+		code := e.INVALID_PARAMS
+		var data interface{}
+		//如果没错误
+		if !valid.HasErrors() {
+			if models.ExistArticleById(id) {
+				data = models.GetArticle(id)
+				code = e.SUCCESS
+			}
+		} else {
+			for _, err := range valid.Errors {
+				log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
+			}
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"code": code,
+			"msg":  e.GetMsg(code),
+			"data": data,
+		})
+	*/
+	appG := app.Gin{c}
 	id := com.StrTo(c.Param("id")).MustInt()
+	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
 
-	code := e.INVALID_PARAMS
-	var data interface{}
-	//如果没错误
-	if !valid.HasErrors() {
-		if models.ExistArticleById(id) {
-			data = models.GetArticle(id)
-			code = e.SUCCESS
-		}
-	} else {
-		for _, err := range valid.Errors {
-			log.Printf("err.key: %s, err.message: %s", err.Key, err.Message)
-		}
+	if valid.HasErrors() {
+		app.MarkErrors(valid.Errors)
+		appG.Response(http.StatusOK, e.INVALID_PARAMS, nil)
+		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"code": code,
-		"msg":  e.GetMsg(code),
-		"data": data,
-	})
-
+	articleService := cache_service.Article{ID: id}
+	articleService.ExistByID()
 }
 
 //获取多个文章
